@@ -89,7 +89,7 @@ public class Start extends SuuScene{
             }
         });
 
-        add("default_fps",new SuuText("default_fps","fps:"+fps,1800,30,0,30,0,0xff000000));
+        add("default_fps",new SuuText("default_fps","fps:"+fps,1860,30,0,30,0,0xff000000));
     }
 
     @Override
