@@ -1,1 +1,1 @@
-include ':app', 'suu:build.gradle', ':suu'
+include ':app', ':suu'

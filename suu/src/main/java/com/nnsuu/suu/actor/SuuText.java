@@ -15,6 +15,21 @@ public class SuuText extends Actor{
     String text;
     int linecount,size,line,color;
 
+    public SuuText(String key, String text, int x, int y, int linecount, int size,int line, int color){
+        this.key = key;
+        this.text = text;
+        this.x = x;
+        this.y = y;
+        this.linecount = linecount;
+        this.size = size;
+        this.line = line;
+        this.color = color;
+        this.filepath = null;
+        this.rotate = 0;
+        this.sb = 1;
+        this.loadMode = LoadMode.Assert;
+    }
+
     public SuuText(String key, String text, int x, int y, int linecount, int size,int line, int color, String ttfpath, LoadMode loadMode){
         this.key = key;
         this.text = text;
@@ -38,9 +53,9 @@ public class SuuText extends Actor{
         playSpeed = 6;
         textureID = Suu.skins.loadTextBitmap(key,text,linecount,size,line,color,filepath, loadMode);
 
-        this.width=((Bitmap)Suu.skins.getSkin(key).get(0)).getWidth();
-        this.height=((Bitmap)Suu.skins.getSkin(key).get(0)).getHeight();
-        ((Bitmap) Suu.skins.getSkin(key).get(0)).recycle();
+        this.width=Suu.skins.getSkin(key).get(0).getWidth();
+        this.height=Suu.skins.getSkin(key).get(0).getHeight();
+        Suu.skins.getSkin(key).get(0).recycle();
         Suu.skins.clearBitmap(key);
         ByteBuffer byteBuffer = ByteBuffer.allocateDirect(4 * 2 * 4);
         byteBuffer.order(ByteOrder.nativeOrder());
@@ -77,10 +92,10 @@ public class SuuText extends Actor{
     public void update(String text){
         this.text = text;
         Suu.skins.updateTextBitmap(key,text,linecount,size,line,color,filepath, loadMode);
-        this.width=((Bitmap)Suu.skins.getSkin(key).get(0)).getWidth();
-        this.height=((Bitmap)Suu.skins.getSkin(key).get(0)).getHeight();
+        this.width=Suu.skins.getSkin(key).get(0).getWidth();
+        this.height=Suu.skins.getSkin(key).get(0).getHeight();
         updateTexture();
-        ((Bitmap) Suu.skins.getSkin(key).get(0)).recycle();
+        Suu.skins.getSkin(key).get(0).recycle();
         Suu.skins.clearBitmap(key);
     }
 
@@ -94,9 +109,9 @@ public class SuuText extends Actor{
         this.color = color;
         this.filepath = filepath;
         Suu.skins.updateTextBitmap(key,text,linecount,size,line,color,filepath,loadMode);
-        this.width=((Bitmap)Suu.skins.getSkin(key).get(0)).getWidth();
-        this.height=((Bitmap)Suu.skins.getSkin(key).get(0)).getHeight();
-        ((Bitmap) Suu.skins.getSkin(key).get(0)).recycle();
+        this.width=Suu.skins.getSkin(key).get(0).getWidth();
+        this.height=Suu.skins.getSkin(key).get(0).getHeight();
+        Suu.skins.getSkin(key).get(0).recycle();
         Suu.skins.clearBitmap(key);
     }
 

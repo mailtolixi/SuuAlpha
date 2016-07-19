@@ -1,6 +1,5 @@
 package com.nnsuu.suu.scene;
 
-import android.util.Log;
 import android.view.MotionEvent;
 
 import com.nnsuu.suu.Suu;
@@ -48,11 +47,25 @@ public abstract class SuuScene implements Scene{
 
     @Override
     public void clear(String actorName) {
+        String skin = actors.get(actorName).getKey();
         actors.remove(actorName);
+
+        iterator = actors.entrySet().iterator();
+        Flag:while (iterator.hasNext()) {
+            entry = iterator.next();
+            if(entry.getValue().getKey().equals(skin)){
+                skin = null;
+                break Flag;
+            }
+        }
+        if (skin!=null) {
+            Suu.skins.clearSkin(skin);
+        }
     }
 
     @Override
     public void clear(Actor actor) {
+        Suu.skins.clearSkin(actors.get(actor).getKey());
         actors.remove(actor);
     }
 
@@ -134,7 +147,7 @@ public abstract class SuuScene implements Scene{
                     if (!"".equals(actorName)) {
                         actors.get(actorName).touchUp(touchX,touchY);
                     }
-                    reTouch();
+                    retouch();
                     break;
             }
 
@@ -149,7 +162,7 @@ public abstract class SuuScene implements Scene{
     }
 
     @Override
-    public void reTouch() {
+    public void retouch() {
         actorName = "";
     }
 }

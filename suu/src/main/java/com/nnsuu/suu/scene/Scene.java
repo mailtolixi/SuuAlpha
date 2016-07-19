@@ -19,5 +19,5 @@ public interface Scene {
     public void ed();
     public boolean touch(MotionEvent event);
     public void back();
-    public void reTouch();
+    public void retouch();
 }

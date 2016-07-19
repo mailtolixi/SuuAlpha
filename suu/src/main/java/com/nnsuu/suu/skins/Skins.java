@@ -19,7 +19,7 @@ public interface Skins {
 
     boolean havaSkin(String key);
     int getTextureID(String key);
-    ArrayList getSkin(String key);
+    ArrayList<Bitmap> getSkin(String key);
     void clearSkin(String key);
     void clearBitmap(String key);
     void clearAll();

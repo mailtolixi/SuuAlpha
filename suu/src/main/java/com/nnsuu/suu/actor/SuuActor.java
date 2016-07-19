@@ -10,6 +10,20 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class SuuActor extends Actor{
 
+    public SuuActor(String key, String filepath, int x, int y, int width, int height, LoadMode loadMode){
+        this.key = key;
+        this.filepath = filepath;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.divideX = 1;
+        this.divideY = 1;
+        this.rotate = 0;
+        this.sb = 1;
+        this.loadMode = loadMode;
+    }
+
     public SuuActor(String key, String filepath, int x, int y, int width, int height, int divideX, int divideY, LoadMode loadMode){
         this.key = key;
         this.filepath = filepath;

@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/SuuAlpha.iml" filepath="$PROJECT_DIR$/SuuAlpha.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/suu/suu.iml" filepath="$PROJECT_DIR$/suu/suu.iml" />
     </modules>
   </component>
 </project>

@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.opengl.GLUtils;
+import android.util.Log;
 
 import com.nnsuu.suu.other.LoadMode;
 import com.nnsuu.suu.Suu;
@@ -20,6 +21,7 @@ import javax.microedition.khronos.opengles.GL10;
 public class SuuSkins implements Skins {
     HashMap<String,TextureFilepath> skins;
     HashMap<String,ArrayList<Bitmap>> bitmaps;
+    ArrayList<Integer> clearSkins;
     Fonts suuFonts;
 
     class TextureFilepath{
@@ -34,6 +36,7 @@ public class SuuSkins implements Skins {
     public SuuSkins(){
         skins = new HashMap<>();
         bitmaps = new HashMap<>();
+        clearSkins = new ArrayList<>();
         suuFonts = new SuuFonts();
     }
 
@@ -72,11 +75,18 @@ public class SuuSkins implements Skins {
                     bitmaps.add(bitmap);
                 }
 
+
                 this.bitmaps.put(filepath,bitmaps);
+
             }
 
             int textureIDs[] = new int[1];
-            Suu.gl.glGenTextures(1, textureIDs, 0);
+            if(clearSkins.size()>0){
+                textureIDs[0] = clearSkins.get(0);
+                clearSkins.remove(0);
+            }else{
+                Suu.gl.glGenTextures(1, textureIDs, 0);
+            }
             skins.put(key,new TextureFilepath(textureIDs[0],filepath));
 
             return bindTexture(textureIDs[0],key);
@@ -140,7 +150,8 @@ public class SuuSkins implements Skins {
                 int fontHeight = rect.height();
                 rect = null;
                 Bitmap bitmap;
-                if (linecount >= text.length()) {
+                if (linecount >= text.length()||linecount<=0) {
+                    linecount = text.length();
                     bitmap = Bitmap.createBitmap((int) paint.measureText(text),
                             (int) (fontHeight * 1.1),
                             Bitmap.Config.ARGB_4444);
@@ -162,7 +173,12 @@ public class SuuSkins implements Skins {
                 this.bitmaps.put(key,bitmaps);
             }
             int textureIDs[] = new int[1];
-            Suu.gl.glGenTextures(1, textureIDs, 0);
+            if(clearSkins.size()>0){
+                textureIDs[0] = clearSkins.get(0);
+                clearSkins.remove(0);
+            }else{
+                Suu.gl.glGenTextures(1, textureIDs, 0);
+            }
             skins.put(key,new TextureFilepath(textureIDs[0],key));
             return bindTexture(textureIDs[0],key);
         }
@@ -191,7 +207,8 @@ public class SuuSkins implements Skins {
         int fontHeight = rect.height();
         rect = null;
         Bitmap bitmap;
-        if(linecount>=text.length()){
+        if(linecount>=text.length()||linecount<=0) {
+            linecount = text.length();
             bitmap = Bitmap.createBitmap((int) paint.measureText(text),
                     (int) (fontHeight*1.1),
                     Bitmap.Config.ARGB_4444);
@@ -270,7 +287,12 @@ public class SuuSkins implements Skins {
                 this.bitmaps.put(key, bitmaps);
             }
             int textureIDs[] = new int[1];
-            Suu.gl.glGenTextures(1, textureIDs, 0);
+            if(clearSkins.size()>0){
+                textureIDs[0] = clearSkins.get(0);
+                clearSkins.remove(0);
+            }else{
+                Suu.gl.glGenTextures(1, textureIDs, 0);
+            }
             skins.put(key,new TextureFilepath(textureIDs[0],key));
             return bindTexture(textureIDs[0],key);
         }
@@ -335,7 +357,7 @@ public class SuuSkins implements Skins {
         Suu.gl.glBindTexture(GL10.GL_TEXTURE_2D, textureID);
         Suu.gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR);
         Suu.gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
-        GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, (Bitmap) getSkin(key).get(0), 0);
+        GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, getSkin(key).get(0), 0);
         return textureID;
     }
 
@@ -350,12 +372,13 @@ public class SuuSkins implements Skins {
     }
 
     @Override
-    public ArrayList getSkin(String key) {
+    public ArrayList<Bitmap> getSkin(String key) {
         return bitmaps.get(skins.get(key).filepath);
     }
 
     @Override
     public void clearSkin(String key) {
+        clearSkins.add(skins.get(key).textureID);
         skins.remove(key);
     }
 
@@ -366,13 +389,15 @@ public class SuuSkins implements Skins {
 
     @Override
     public void clearAll() {
-        int textureIDs[] = new int[skins.size()];
-        for (int i = skins.size(); i > 0; i--){
-            textureIDs[skins.size()-i] = i;
+        int textureIDs[] = new int[skins.size()+clearSkins.size()];
+        for (int i = skins.size()+clearSkins.size(); i > 0; i--){
+            textureIDs[skins.size()+clearSkins.size()-i] = i;
         }
-        Suu.gl.glDeleteTextures(skins.size(),textureIDs,0);
+        Suu.gl.glDeleteTextures(skins.size()+clearSkins.size(),textureIDs,0);
+
 
         skins = new HashMap<>();
         bitmaps = new HashMap<>();
+        clearSkins = new ArrayList<>();
     }
 }
