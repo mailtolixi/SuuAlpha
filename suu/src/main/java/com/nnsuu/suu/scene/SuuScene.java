@@ -13,13 +13,14 @@ import java.util.LinkedHashMap;
 import java.util.ListIterator;
 import java.util.Map;
 
+
 public abstract class SuuScene implements Scene{
     LinkedHashMap<String,Actor> actors;
     Iterator<Map.Entry<String, Actor>> iterator;
     Map.Entry<String, Actor> entry;
     ListIterator listIterator;
-
     ArrayList<Anime> animes;
+
     boolean inFlag;
     String actorName;
 
@@ -28,7 +29,7 @@ public abstract class SuuScene implements Scene{
         animes = new ArrayList<>();
         inFlag = true;
         actorName = "";
-        op();
+
     }
     @Override
     public void add(String actorName,Actor actor) {
@@ -47,20 +48,9 @@ public abstract class SuuScene implements Scene{
 
     @Override
     public void clear(String actorName) {
-        String skin = actors.get(actorName).getKey();
+        Suu.skins.clearSkin(actors.get(actorName).getKey());
         actors.remove(actorName);
 
-        iterator = actors.entrySet().iterator();
-        Flag:while (iterator.hasNext()) {
-            entry = iterator.next();
-            if(entry.getValue().getKey().equals(skin)){
-                skin = null;
-                break Flag;
-            }
-        }
-        if (skin!=null) {
-            Suu.skins.clearSkin(skin);
-        }
     }
 
     @Override
@@ -77,6 +67,7 @@ public abstract class SuuScene implements Scene{
     @Override
     public void in() {
         if (inFlag){
+            op();
             iterator = actors.entrySet().iterator();
             while (iterator.hasNext()) {
                 entry = iterator.next();
@@ -84,6 +75,7 @@ public abstract class SuuScene implements Scene{
             }
             inFlag = !inFlag;
         }
+
     }
     @Override
     public void play() {
@@ -109,8 +101,22 @@ public abstract class SuuScene implements Scene{
     }
 
     @Override
+    public void pause() {
+    }
+
+    @Override
+    public void resume() {
+    }
+
+    @Override
     public void ed() {
-        Suu.skins.clearAll();
+        iterator = actors.entrySet().iterator();
+        while (iterator.hasNext()) {
+            entry = iterator.next();
+            Suu.skins.clearSkin(entry.getValue().getKey());
+        }
+        actors.clear();
+        animes.clear();
     }
 
     @Override

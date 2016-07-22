@@ -1,5 +1,6 @@
 package com.nnsuu.suualpha;
 
+import com.nnsuu.suu.Suu;
 import com.nnsuu.suu.actor.SuuActor;
 import com.nnsuu.suu.actor.SuuButton;
 import com.nnsuu.suu.actor.SuuText;
@@ -90,6 +91,12 @@ public class Start extends SuuScene{
         });
 
         add("default_fps",new SuuText("default_fps","fps:"+fps,1860,30,0,30,0,0xff000000));
+    }
+
+    @Override
+    public void back() {
+        super.back();
+        Suu.app.finish();
     }
 
     @Override

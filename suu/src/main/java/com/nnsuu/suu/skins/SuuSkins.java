@@ -15,6 +15,8 @@ import com.nnsuu.suu.SuuActivity;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -27,9 +29,11 @@ public class SuuSkins implements Skins {
     class TextureFilepath{
         int textureID;
         String filepath;
+        int count;
         TextureFilepath(int textureID, String filepath){
             this.textureID = textureID;
             this.filepath = filepath;
+            count=1;
         }
     }
 
@@ -43,7 +47,8 @@ public class SuuSkins implements Skins {
     @Override
     public int loadActorBitmap(String key, String filepath, int divideX, int divideY, LoadMode loadMode) {
         if(havaSkin(key)){
-            return skins.get(key).textureID;
+            skins.get(key).count++;
+            return getTextureID(key);
         } else {
             if(!this.bitmaps.containsKey(filepath)) {
                 Bitmap bitmap = null;
@@ -51,13 +56,11 @@ public class SuuSkins implements Skins {
                     bitmap = BitmapFactory.decodeFile(filepath);
                 } else {
                     try {
-                        bitmap = BitmapFactory.decodeStream(Suu.app.getResources().getAssets().open(filepath));
+                        bitmap = BitmapFactory.decodeStream(Suu.app.getAssets().open(filepath));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
-
-
 
                 ArrayList<Bitmap> bitmaps = new ArrayList<>();
                 if (divideX * divideY > 1) {
@@ -100,7 +103,7 @@ public class SuuSkins implements Skins {
             bitmap = BitmapFactory.decodeFile(filepath);
         } else {
             try {
-                bitmap = BitmapFactory.decodeStream(Suu.app.getResources().getAssets().open(filepath));
+                bitmap = BitmapFactory.decodeStream(Suu.app.getAssets().open(filepath));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -126,6 +129,7 @@ public class SuuSkins implements Skins {
     @Override
     public int loadTextBitmap(String key,String text, int linecount, int size,int line, int color, String ttfpath, LoadMode loadMode) {
         if(havaSkin(key)){
+            skins.get(key).count++;
             return getTextureID(key);
         } else {
             if(!this.bitmaps.containsKey(key)) {
@@ -232,6 +236,7 @@ public class SuuSkins implements Skins {
     @Override
     public int loadButtonBitmap(String key, String filepath,int height, int divideX, int divideY, String text, int size, int color, String ttfpath, LoadMode loadMode) {
         if(havaSkin(key)){
+            skins.get(key).count++;
             return getTextureID(key);
         } else {
             Bitmap bitmap = null;
@@ -239,7 +244,7 @@ public class SuuSkins implements Skins {
                 bitmap = BitmapFactory.decodeFile(filepath);
             } else {
                 try {
-                    bitmap = BitmapFactory.decodeStream(Suu.app.getResources().getAssets().open(filepath));
+                    bitmap = BitmapFactory.decodeStream(Suu.app.getAssets().open(filepath));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -305,7 +310,7 @@ public class SuuSkins implements Skins {
             bitmap = BitmapFactory.decodeFile(filepath);
         } else {
             try {
-                bitmap = BitmapFactory.decodeStream(Suu.app.getResources().getAssets().open(filepath));
+                bitmap = BitmapFactory.decodeStream(Suu.app.getAssets().open(filepath));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -378,8 +383,12 @@ public class SuuSkins implements Skins {
 
     @Override
     public void clearSkin(String key) {
-        clearSkins.add(skins.get(key).textureID);
-        skins.remove(key);
+        skins.get(key).count--;
+        if (skins.get(key).count<=0) {
+            clearSkins.add(skins.get(key).textureID);
+            skins.remove(key);
+            clearBitmap(key);
+        }
     }
 
     @Override
@@ -395,9 +404,16 @@ public class SuuSkins implements Skins {
         }
         Suu.gl.glDeleteTextures(skins.size()+clearSkins.size(),textureIDs,0);
 
-
-        skins = new HashMap<>();
-        bitmaps = new HashMap<>();
-        clearSkins = new ArrayList<>();
+        Iterator iterator = bitmaps.entrySet().iterator();
+        Map.Entry<String,ArrayList<Bitmap>> entry;
+        while (iterator.hasNext()) {
+            entry  = (Map.Entry<String, ArrayList<Bitmap>>) iterator.next();
+            for(Bitmap bitmap:entry.getValue()){
+                bitmap.recycle();
+            }
+        }
+        skins.clear();
+        bitmaps.clear();
+        clearSkins.clear();
     }
 }
