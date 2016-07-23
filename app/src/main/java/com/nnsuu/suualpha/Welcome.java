@@ -16,7 +16,7 @@ public class Welcome extends SuuActivity {
             public void op() {
                 add("welcome",new SuuText("welcome","Suu",960,540,0,300,0,0xff000000,
                         "font/KLS.ttf", LoadMode.Assert));
-                add(new SuuAnime("welcome",1200,this){
+                add(new SuuAnime("welcome",120,this){
                     @Override
                     public void ed() {
                         super.ed();
@@ -24,7 +24,7 @@ public class Welcome extends SuuActivity {
                     }
                 });
                 Suu.sounds.setBackgroundSound("sound/test.mp3",LoadMode.Assert);
-//                Suu.sounds.play();
+                Suu.sounds.play();
             }
         });
     }

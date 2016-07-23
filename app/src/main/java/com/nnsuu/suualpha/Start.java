@@ -48,20 +48,20 @@ public class Start extends SuuScene{
 
             @Override
             public void touchDown() {
-                setPlayID(6);
+                setXYid(1,2);
             }
 
             @Override
             public void touchMove(int x, int y) {
                 if (!inActor(x,y)){
-                    setPlayID(0);
+                    setXYid(1,1);
                     retouch();
                 }
             }
 
             @Override
             public void touchUp(int x, int y) {
-                setPlayID(0);
+                setXYid(1,1);
             }
         });
         add("default_button2",new SuuButton("default_button2",
@@ -73,20 +73,20 @@ public class Start extends SuuScene{
 
             @Override
             public void touchDown() {
-                setPlayID(6);
+                setXYid(1,2);
             }
 
             @Override
             public void touchMove(int x, int y) {
                 if (!inActor(x,y)){
-                    setPlayID(0);
+                    setXYid(1,1);
                     retouch();
                 }
             }
 
             @Override
             public void touchUp(int x, int y) {
-                setPlayID(0);
+                setXYid(1,1);
             }
         });
 

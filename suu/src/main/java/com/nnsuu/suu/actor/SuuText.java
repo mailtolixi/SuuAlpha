@@ -53,10 +53,8 @@ public class SuuText extends Actor{
         playSpeed = 6;
         textureID = Suu.skins.loadTextBitmap(key,text,linecount,size,line,color,filepath, loadMode);
 
-        this.width=Suu.skins.getSkin(key).get(0).getWidth();
-        this.height=Suu.skins.getSkin(key).get(0).getHeight();
-        Suu.skins.getSkin(key).get(0).recycle();
-        Suu.skins.clearBitmap(key);
+        this.width=Suu.skins.getTextWidth();
+        this.height=Suu.skins.getTextHeight();
         ByteBuffer byteBuffer = ByteBuffer.allocateDirect(4 * 2 * 4);
         byteBuffer.order(ByteOrder.nativeOrder());
         vertices = byteBuffer.asFloatBuffer();
@@ -92,11 +90,8 @@ public class SuuText extends Actor{
     public void update(String text){
         this.text = text;
         Suu.skins.updateTextBitmap(key,text,linecount,size,line,color,filepath, loadMode);
-        this.width=Suu.skins.getSkin(key).get(0).getWidth();
-        this.height=Suu.skins.getSkin(key).get(0).getHeight();
-        updateTexture();
-        Suu.skins.getSkin(key).get(0).recycle();
-        Suu.skins.clearBitmap(key);
+        this.width=Suu.skins.getTextWidth();
+        this.height=Suu.skins.getTextHeight();
     }
 
     public void update(String text, int x, int y, int linecount, int size, int line, int color, String filepath){
@@ -109,33 +104,12 @@ public class SuuText extends Actor{
         this.color = color;
         this.filepath = filepath;
         Suu.skins.updateTextBitmap(key,text,linecount,size,line,color,filepath,loadMode);
-        this.width=Suu.skins.getSkin(key).get(0).getWidth();
-        this.height=Suu.skins.getSkin(key).get(0).getHeight();
-        Suu.skins.getSkin(key).get(0).recycle();
-        Suu.skins.clearBitmap(key);
+        this.width=Suu.skins.getTextWidth();
+        this.height=Suu.skins.getTextHeight();
     }
 
     @Override
     public void play() {
-    }
-
-    @Override
-    public void draw() {
-        Suu.gl.glVertexPointer(2, GL10.GL_FLOAT, 0, vertices);
-        Suu.gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, texture);
-        if(updateFlag){
-            updateTexture();
-            updateFlag = false;
-        }else{
-            Suu.gl.glBindTexture(GL10.GL_TEXTURE_2D, textureID);
-        }
-        Suu.gl.glTexParameterf(GL10.GL_TEXTURE_2D,GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
-        Suu.gl.glPushMatrix();
-        Suu.gl.glRotatef(rotate,0,0,1);
-        Suu.gl.glTranslatef(x,y,0);
-        Suu.gl.glScalef(width*sb,height*sb,1);
-        Suu.gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, 6,GL10.GL_UNSIGNED_SHORT, indices);
-        Suu.gl.glPopMatrix();
     }
 
     @Override
